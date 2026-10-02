@@ -27,7 +27,7 @@ export default async function PresupuestosPage() {
 
   const items = error
     ? []
-    : await Promise.all((rows ?? []).map((row) => withSignedDocument(supabase, toItem(row))));
+    : await Promise.all((rows ?? []).map((row, index) => withSignedDocument(supabase, toItem(row, index))));
 
   return (
     <AuthScreen
