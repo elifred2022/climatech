@@ -59,13 +59,15 @@ export function MisPresupuestos({ items, todos = false }: { items: PresupuestoIt
   return (
     <div className="flex flex-col gap-4">
       {items.length === 0 ? null : (
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <div className="min-w-0 flex-1">
+        <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:items-center">
+          <div className="min-w-0 lg:min-w-48 lg:flex-1">
             <Buscar value={query} onChange={setQuery} />
           </div>
           <FiltroEstado value={estado} onChange={setEstado} />
-          <FiltroFecha label="Desde" value={desde} onChange={setDesde} />
-          <FiltroFecha label="Hasta" value={hasta} onChange={setHasta} />
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:flex">
+            <FiltroFecha label="Desde" value={desde} onChange={setDesde} />
+            <FiltroFecha label="Hasta" value={hasta} onChange={setHasta} />
+          </div>
         </div>
       )}
       <PresupuestosTabla items={visible} todos={todos} empty={items.length === 0} filtering={filtering} />
@@ -110,7 +112,48 @@ function PresupuestosTabla({
   }
 
   return (
-    <table className="w-full table-fixed border-collapse text-left text-xs">
+    <>
+      <ul className="flex flex-col gap-3 lg:hidden">
+        {items.map((item) => (
+          <li key={item.id} className="rounded-2xl border border-[#d3e7f3] bg-white p-3">
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-sm font-semibold">#{item.id}</p>
+              <p className="text-right text-xs text-navy/60">{item.fecha}</p>
+            </div>
+            {todos ? (
+              <div className="mt-2 text-sm">
+                <p className="font-semibold">{item.cliente || "Sin nombre"}</p>
+                <p className="[overflow-wrap:anywhere] text-navy/60">
+                  <WrappedEmail email={item.email} />
+                </p>
+                {item.telefono ? <p className="text-navy/60">{item.telefono}</p> : null}
+              </div>
+            ) : null}
+            <dl className="mt-3 grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-3 gap-y-2 text-sm">
+              <Dato label="Dirección" value={item.direccion} />
+              <Dato label="Capacidad" value={item.capacidad} />
+              <Dato label="Servicio" value={item.servicio || "—"} />
+              <div className="contents">
+                <dt className="text-navy/50">Estado</dt>
+                <dd>
+                  <EstadoValor item={item} todos={todos} />
+                </dd>
+              </div>
+              <div className="contents">
+                <dt className="text-navy/50">Fechas</dt>
+                <dd>
+                  <HistorialValor item={item} />
+                </dd>
+              </div>
+            </dl>
+            <div className="mt-3 flex flex-col gap-2">
+              {todos ? <AdjuntarPresupuesto id={item.id} documento={item.documento} compact /> : null}
+              <DocumentoValor item={item} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    <table className="hidden w-full table-fixed border-collapse text-left text-xs lg:table">
       <thead>
         <tr className="border-b border-[#d3e7f3] text-[11px] leading-tight text-navy/50">
           <th className={head}>ID</th>
@@ -143,38 +186,10 @@ function PresupuestosTabla({
             <td className={`${cell} whitespace-nowrap`}>{item.capacidad}</td>
             <td className={cell}>{item.servicio || "—"}</td>
             <td className={cell}>
-              {item.estado ? (
-                item.documento?.url ? (
-                  <a
-                    href={item.documento.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={estadoClass(item.estado, true)}
-                  >
-                    {item.estado}
-                  </a>
-                ) : (
-                  <span className={estadoClass(item.estado, false)}>{item.estado}</span>
-                )
-              ) : (
-                "—"
-              )}
-              {todos || !puedeConfirmar(item.estado) ? null : (
-                <EditarConfirma id={item.id} estado={item.estado} />
-              )}
+              <EstadoValor item={item} todos={todos} />
             </td>
             <td className={cell}>
-              {item.historial.length === 0 ? (
-                "—"
-              ) : (
-                <div className="flex flex-col gap-1">
-                  {item.historial.map((entry, index) => (
-                    <p key={`${entry.estado}-${entry.fecha}-${index}`} className={estadoClass(entry.estado, false)}>
-                      {entry.estado} {formatHistoryDate(entry.fecha)}
-                    </p>
-                  ))}
-                </div>
-              )}
+              <HistorialValor item={item} />
             </td>
             {todos ? (
               <td className={cell}>
@@ -182,36 +197,86 @@ function PresupuestosTabla({
               </td>
             ) : null}
             <td className={cell}>
-              {item.documento?.url ? (
-                <a
-                  href={item.documento.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-teal underline-offset-2 hover:underline"
-                >
-                  Ver presupuesto
-                </a>
-              ) : (
-                "—"
-              )}
+              <DocumentoValor item={item} />
             </td>
           </tr>
         ))}
       </tbody>
     </table>
+    </>
+  );
+}
+
+function Dato({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="contents">
+      <dt className="text-navy/50">{label}</dt>
+      <dd className="[overflow-wrap:anywhere]">{value}</dd>
+    </div>
+  );
+}
+
+function EstadoValor({ item, todos }: { item: PresupuestoItem; todos: boolean }) {
+  return (
+    <>
+      {item.estado ? (
+        item.documento?.url ? (
+          <a
+            href={item.documento.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={estadoClass(item.estado, true)}
+          >
+            {item.estado}
+          </a>
+        ) : (
+          <span className={estadoClass(item.estado, false)}>{item.estado}</span>
+        )
+      ) : (
+        "—"
+      )}
+      {todos || !puedeConfirmar(item.estado) ? null : <EditarConfirma id={item.id} estado={item.estado} />}
+    </>
+  );
+}
+
+function HistorialValor({ item }: { item: PresupuestoItem }) {
+  if (item.historial.length === 0) return "—";
+  return (
+    <div className="flex flex-col gap-1">
+      {item.historial.map((entry, index) => (
+        <p key={`${entry.estado}-${entry.fecha}-${index}`} className={estadoClass(entry.estado, false)}>
+          {entry.estado} {formatHistoryDate(entry.fecha)}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function DocumentoValor({ item }: { item: PresupuestoItem }) {
+  if (!item.documento?.url) return "—";
+  return (
+    <a
+      href={item.documento.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex min-h-10 items-center font-semibold text-teal underline-offset-2 hover:underline lg:min-h-0"
+    >
+      Ver presupuesto
+    </a>
   );
 }
 
 function FiltroFecha({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return (
-    <label className="flex h-10 items-center gap-2 rounded-full border border-[#b7d7ea] bg-white px-3 text-sm text-navy">
-      <span className="text-navy/60">{label}</span>
+    <label className="flex h-10 min-w-0 items-center gap-2 rounded-full border border-[#b7d7ea] bg-white px-3 text-sm text-navy">
+      <span className="shrink-0 text-navy/60">{label}</span>
       <input
         type="date"
         aria-label={`Fecha ${label.toLowerCase()}`}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="bg-transparent outline-none"
+        className="min-w-0 flex-1 bg-transparent outline-none"
       />
     </label>
   );
@@ -230,7 +295,7 @@ function FiltroEstado({ value, onChange }: { value: string; onChange: (value: st
       aria-label="Filtrar por estado"
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      className="h-10 rounded-full border border-[#b7d7ea] bg-white px-4 text-sm text-navy outline-none focus:border-teal"
+      className="h-10 w-full rounded-full border border-[#b7d7ea] bg-white px-4 text-sm text-navy outline-none focus:border-teal lg:w-auto"
     >
       {estados.map((option) => (
         <option key={option.value || "todos"} value={option.value}>

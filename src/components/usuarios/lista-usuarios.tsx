@@ -53,7 +53,36 @@ export function ListaUsuarios({ items }: { items: UsuarioItem[] }) {
 
 function UsuariosTabla({ items }: { items: UsuarioItem[] }) {
   return (
-    <table className="w-full table-fixed border-collapse text-left text-xs">
+    <>
+      <ul className="flex flex-col gap-3 lg:hidden">
+        {items.map((item) => (
+          <li key={item.id} className="rounded-2xl border border-[#d3e7f3] bg-white p-3">
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-sm font-semibold">#{item.id}</p>
+              <p className="text-right text-xs text-navy/60">{item.fecha || "—"}</p>
+            </div>
+            <dl className="mt-3 grid grid-cols-[6.5rem_minmax(0,1fr)] gap-x-3 gap-y-2 text-sm">
+              <Dato label="Nombre" value={item.nombre || "—"} />
+              <Dato label="Apellido" value={item.apellido || "—"} />
+              <Dato label="DNI" value={item.dni || "—"} />
+              <div className="contents">
+                <dt className="text-navy/50">Email</dt>
+                <dd className="[overflow-wrap:anywhere]">{item.email ? <WrappedEmail email={item.email} /> : "—"}</dd>
+              </div>
+              <Dato label="Teléfono" value={item.telefono || "—"} />
+              <Dato label="Dirección" value={item.direccion || "—"} />
+              <div className="contents">
+                <dt className="text-navy/50">Rol</dt>
+                <dd>
+                  <p className="capitalize">{item.rol || "—"}</p>
+                  <EditarRol id={item.id} rol={item.rol} />
+                </dd>
+              </div>
+            </dl>
+          </li>
+        ))}
+      </ul>
+    <table className="hidden w-full table-fixed border-collapse text-left text-xs lg:table">
       <colgroup>
         <col className="w-[5%]" />
         <col className="w-[11%]" />
@@ -97,6 +126,16 @@ function UsuariosTabla({ items }: { items: UsuarioItem[] }) {
         ))}
       </tbody>
     </table>
+    </>
+  );
+}
+
+function Dato({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="contents">
+      <dt className="text-navy/50">{label}</dt>
+      <dd className="[overflow-wrap:anywhere]">{value}</dd>
+    </div>
   );
 }
 
