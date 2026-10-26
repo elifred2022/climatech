@@ -28,7 +28,7 @@ export default async function PresupuestoPage() {
       <div className="flex flex-col gap-3">
         <Link
           href="/ingresar?siguiente=/presupuesto"
-          className="inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#0f2438]"
+          className="inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#081654]"
         >
           Iniciar sesión
         </Link>

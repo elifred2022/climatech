@@ -44,14 +44,14 @@ export default async function Home() {
   const esAdmin = isAdmin(profile.rol);
 
   return (
-    <div className="relative min-h-full overflow-hidden bg-[radial-gradient(circle_at_top_left,_#d7eef8_0%,_#eef6fb_42%,_#f7fbfe_100%)] text-navy">
+    <div className="relative min-h-full overflow-hidden bg-[radial-gradient(circle_at_top_left,_#d9f6ff_0%,_#eef4ff_42%,_#f7fbff_100%)] text-navy">
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-teal/15 blur-3xl"
+        className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-teal/20 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-16 top-0 h-80 w-80 rounded-full bg-[#8fd3ef]/40 blur-3xl"
+        className="pointer-events-none absolute -right-16 top-0 h-80 w-80 rounded-full bg-heat/15 blur-3xl"
       />
 
       <header className="relative z-30 mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
@@ -86,7 +86,7 @@ export default async function Home() {
               {esAdmin ? null : (
                 <a
                   href="/presupuestos"
-                  className="rounded-full border border-[#b7d7ea] bg-white px-3 py-1 text-xs font-semibold text-navy transition hover:border-teal"
+                  className="rounded-full border border-[#b7e4f4] bg-white px-3 py-1 text-xs font-semibold text-navy transition hover:border-teal"
                 >
                   Ver mis presupuestos
                 </a>
@@ -114,7 +114,7 @@ export default async function Home() {
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-16 px-5 pb-24 sm:px-8">
         <section
           id="inicio"
-          className="relative overflow-hidden rounded-[2rem] border border-[#c5dff0] bg-white/80 px-6 py-12 shadow-[0_20px_60px_rgba(22,50,79,0.08)] sm:px-12 sm:py-16"
+          className="relative overflow-hidden rounded-[2rem] border border-[#c5e6f6] bg-white/80 px-6 py-12 shadow-[0_20px_60px_rgba(11,31,107,0.08)] sm:px-12 sm:py-16"
         >
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
             <Logo large />
@@ -132,13 +132,13 @@ export default async function Home() {
             <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <a
                 href="/presupuesto"
-                className="inline-flex h-12 items-center justify-center rounded-full bg-navy px-6 text-sm font-semibold text-white transition hover:bg-[#0f2438]"
+                className="inline-flex h-12 items-center justify-center rounded-full bg-heat px-6 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(255,106,44,0.28)] transition hover:bg-[#e85a1c]"
               >
                 Pedir presupuesto
               </a>
               <a
                 href="#servicios"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-[#b7d7ea] bg-ice px-6 text-sm font-semibold text-navy transition hover:border-teal"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-[#b7e4f4] bg-ice px-6 text-sm font-semibold text-navy transition hover:border-teal"
               >
                 Ver servicios
               </a>
@@ -158,11 +158,11 @@ export default async function Home() {
             {services.map((service, index) => (
               <li
                 key={service.title}
-                className={`flex items-start gap-4 rounded-3xl border border-[#d3e7f3] bg-white/75 p-5 md:col-span-2 ${
+                className={`flex items-start gap-4 rounded-3xl border border-[#d4eaf6] bg-white/75 p-5 md:col-span-2 ${
                   index === 3 ? "md:col-start-2" : ""
                 }`}
               >
-                <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#e7f5fb] text-teal">
+                <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#e7f8fd] text-teal">
                   <service.icon />
                 </span>
                 <div>
@@ -178,7 +178,7 @@ export default async function Home() {
 
         <section
           id="cobertura"
-          className="scroll-mt-8 flex flex-col items-center rounded-[2rem] border border-[#c5dff0] bg-white/70 px-6 py-10 text-center"
+          className="scroll-mt-8 flex flex-col items-center rounded-[2rem] border border-[#c5e6f6] bg-white/70 px-6 py-10 text-center"
         >
           <Pin />
           <h2 className="mt-3 text-3xl font-extrabold uppercase tracking-wide text-teal">
@@ -219,7 +219,7 @@ export default async function Home() {
           <p className="mt-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-white/90">
             Atención profesional y garantizada
           </p>
-          <p className="mt-2 text-center text-xs font-medium uppercase tracking-[0.18em] text-[#9fd4ee]">
+          <p className="mt-2 text-center text-xs font-medium uppercase tracking-[0.18em] text-[#7ee8f7]">
             Tu comodidad es nuestra prioridad
           </p>
         </section>
@@ -264,7 +264,7 @@ function greeting(nombre: string, rol: string) {
 
 function PersonIcon() {
   return (
-    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-navy ring-1 ring-[#d5ebf6]">
+    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-navy ring-1 ring-[#d4eef8]">
       <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden fill="none">
         <circle cx="12" cy="8" r="3.25" stroke="currentColor" strokeWidth="1.6" />
         <path
@@ -279,52 +279,22 @@ function PersonIcon() {
 }
 
 function Logo({ large = false }: { large?: boolean }) {
-  const size = large ? "h-24 w-24" : "h-12 w-12";
+  const size = large ? "h-44 w-44 sm:h-52 sm:w-52" : "h-16 w-16";
   return (
-    <span
-      className={`${size} inline-flex items-center justify-center rounded-full bg-white shadow-[0_8px_24px_rgba(28,143,196,0.18)] ring-1 ring-[#d5ebf6]`}
-    >
-      <svg viewBox="0 0 64 64" className="h-[92%] w-[92%]" aria-hidden>
-        <ellipse cx="24" cy="56.5" rx="6.5" ry="2.8" fill="#f4a261" />
-        <ellipse cx="39" cy="56.5" rx="6.5" ry="2.8" fill="#e0893f" />
-        <path
-          d="M16 40c-5 1.5-8 8-5 12 4-3 7-7 9-11"
-          fill="#10283f"
-        />
-        <ellipse cx="31" cy="40" rx="14" ry="16.5" fill="#16324f" />
-        <ellipse cx="31" cy="44.5" rx="8.2" ry="10" fill="#fff" />
-        <path d="M17.5 27.5c.6-12 7.4-17.5 13.5-17.5s12.8 5.5 13.5 17.5" fill="#ffd84a" />
-        <path d="M24 16c2.2-3.2 5-4.6 7-4.6" fill="none" stroke="#fff6c2" strokeWidth="1.8" strokeLinecap="round" />
-        <ellipse cx="31" cy="27.5" rx="17" ry="4.2" fill="#e2ae12" />
-        <ellipse cx="31" cy="26.2" rx="15.2" ry="2.6" fill="#ffd84a" />
-        <ellipse cx="26" cy="34" rx="3.1" ry="3.5" fill="#fff" />
-        <ellipse cx="36.5" cy="34" rx="3.1" ry="3.5" fill="#fff" />
-        <circle cx="26.7" cy="34.6" r="1.55" fill="#16324f" />
-        <circle cx="37.2" cy="34.6" r="1.55" fill="#16324f" />
-        <circle cx="26.1" cy="33.9" r="0.55" fill="#fff" />
-        <circle cx="36.6" cy="33.9" r="0.55" fill="#fff" />
-        <path d="M29.2 38.2h4.2l-2.1 2.8z" fill="#f4a261" />
-        <path d="M28.4 41.6c.8.7 1.8 1 2.8 1s2-.3 2.8-1" fill="none" stroke="#16324f" strokeWidth="1" strokeLinecap="round" />
-        <g transform="translate(44 26) rotate(28)">
-          <path
-            fill="#5f7386"
-            d="M1.2 7.4h6.4V5.2c0-2.6-1.2-4.4-3.2-4.4S1.2 2.6 1.2 5.2v2.2z"
-          />
-          <rect x="3.15" y="1.15" width="2.5" height="3.3" rx="0.5" fill="#fff" />
-          <rect x="3.3" y="7" width="2.2" height="16" rx="1.1" fill="#5f7386" />
-          <rect x="3.7" y="9" width="0.7" height="10" rx="0.35" fill="#c5d0da" />
-        </g>
-      </svg>
-    </span>
+    <img
+      src="/logo.jpg"
+      alt=""
+      className={`${size} rounded-full object-cover`}
+    />
   );
 }
 
 function InstallIcon() {
   return (
     <svg viewBox="0 0 48 48" className="h-9 w-9" aria-hidden>
-      <rect x="6" y="16" width="28" height="12" rx="3" fill="#d7f0fa" stroke="#1c8fc4" strokeWidth="2" />
-      <path d="M10 22h10M34 28c2 4 6 6 8 4" fill="none" stroke="#16324f" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="36" cy="34" r="3" fill="none" stroke="#16324f" strokeWidth="2" />
+      <rect x="6" y="16" width="28" height="12" rx="3" fill="#d7f0fa" stroke="#14c8e8" strokeWidth="2" />
+      <path d="M10 22h10M34 28c2 4 6 6 8 4" fill="none" stroke="#0b1f6b" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="36" cy="34" r="3" fill="none" stroke="#0b1f6b" strokeWidth="2" />
     </svg>
   );
 }
@@ -332,9 +302,9 @@ function InstallIcon() {
 function MaintainIcon() {
   return (
     <svg viewBox="0 0 48 48" className="h-9 w-9" aria-hidden>
-      <rect x="8" y="10" width="16" height="22" rx="2" fill="#d7f0fa" stroke="#1c8fc4" strokeWidth="2" />
-      <path d="M12 16h8M12 21h8M12 26h8" stroke="#1c8fc4" strokeWidth="1.6" />
-      <path d="M26 30l8-14 4 2-8 14z" fill="#f4e2b0" stroke="#16324f" strokeWidth="1.6" />
+      <rect x="8" y="10" width="16" height="22" rx="2" fill="#d7f0fa" stroke="#14c8e8" strokeWidth="2" />
+      <path d="M12 16h8M12 21h8M12 26h8" stroke="#14c8e8" strokeWidth="1.6" />
+      <path d="M26 30l8-14 4 2-8 14z" fill="#f4e2b0" stroke="#0b1f6b" strokeWidth="1.6" />
       <path d="M34 14c2-3 5-3 6 0" fill="none" stroke="#7ec8e6" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
@@ -343,10 +313,10 @@ function MaintainIcon() {
 function DiagnoseIcon() {
   return (
     <svg viewBox="0 0 48 48" className="h-9 w-9" aria-hidden>
-      <circle cx="24" cy="16" r="6" fill="#d7f0fa" stroke="#16324f" strokeWidth="2" />
-      <path d="M14 38c1-8 6-12 10-12s9 4 10 12" fill="#d7f0fa" stroke="#1c8fc4" strokeWidth="2" />
-      <circle cx="34" cy="30" r="6" fill="white" stroke="#1c8fc4" strokeWidth="2" />
-      <path d="M34 27v3l2 2" fill="none" stroke="#16324f" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="24" cy="16" r="6" fill="#d7f0fa" stroke="#0b1f6b" strokeWidth="2" />
+      <path d="M14 38c1-8 6-12 10-12s9 4 10 12" fill="#d7f0fa" stroke="#14c8e8" strokeWidth="2" />
+      <circle cx="34" cy="30" r="6" fill="white" stroke="#14c8e8" strokeWidth="2" />
+      <path d="M34 27v3l2 2" fill="none" stroke="#0b1f6b" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   );
 }
@@ -354,10 +324,10 @@ function DiagnoseIcon() {
 function MoveIcon() {
   return (
     <svg viewBox="0 0 48 48" className="h-9 w-9" aria-hidden>
-      <rect x="6" y="20" width="22" height="12" rx="2" fill="#d7f0fa" stroke="#1c8fc4" strokeWidth="2" />
-      <path d="M28 24h8l4 6v2h-12" fill="#eef6fb" stroke="#16324f" strokeWidth="2" />
-      <circle cx="14" cy="34" r="3" fill="none" stroke="#16324f" strokeWidth="2" />
-      <circle cx="32" cy="34" r="3" fill="none" stroke="#16324f" strokeWidth="2" />
+      <rect x="6" y="20" width="22" height="12" rx="2" fill="#d7f0fa" stroke="#14c8e8" strokeWidth="2" />
+      <path d="M28 24h8l4 6v2h-12" fill="#eef6fb" stroke="#0b1f6b" strokeWidth="2" />
+      <circle cx="14" cy="34" r="3" fill="none" stroke="#0b1f6b" strokeWidth="2" />
+      <circle cx="32" cy="34" r="3" fill="none" stroke="#0b1f6b" strokeWidth="2" />
     </svg>
   );
 }
@@ -365,10 +335,10 @@ function MoveIcon() {
 function RepairIcon() {
   return (
     <svg viewBox="0 0 48 48" className="h-9 w-9" aria-hidden>
-      <circle cx="18" cy="22" r="6" fill="none" stroke="#1c8fc4" strokeWidth="2" />
-      <circle cx="30" cy="18" r="4" fill="none" stroke="#16324f" strokeWidth="2" />
-      <path d="M28 30l10 8" stroke="#16324f" strokeWidth="2.4" strokeLinecap="round" />
-      <path d="M34 34l6-2 2 4-6 2z" fill="#d7f0fa" stroke="#1c8fc4" strokeWidth="1.6" />
+      <circle cx="18" cy="22" r="6" fill="none" stroke="#14c8e8" strokeWidth="2" />
+      <circle cx="30" cy="18" r="4" fill="none" stroke="#0b1f6b" strokeWidth="2" />
+      <path d="M28 30l10 8" stroke="#0b1f6b" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M34 34l6-2 2 4-6 2z" fill="#d7f0fa" stroke="#14c8e8" strokeWidth="1.6" />
     </svg>
   );
 }

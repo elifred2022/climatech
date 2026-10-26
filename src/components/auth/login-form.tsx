@@ -98,7 +98,7 @@ export function LoginForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-1 inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#0f2438] disabled:opacity-60"
+        className="mt-1 inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#081654] disabled:opacity-60"
       >
         {pending ? "Ingresando..." : "Iniciar sesión"}
       </button>

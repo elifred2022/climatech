@@ -17,7 +17,7 @@ export function AuthScreen({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-full bg-[radial-gradient(circle_at_top_left,_#d7eef8_0%,_#eef6fb_42%,_#f7fbfe_100%)] text-navy">
+    <div className="min-h-full bg-[radial-gradient(circle_at_top_left,_#d9f6ff_0%,_#eef4ff_42%,_#f7fbff_100%)] text-navy">
       <header
         className={`mx-auto flex w-full items-center justify-between ${fit ? "px-4 py-3" : "max-w-6xl px-5 py-5 sm:px-8"}`}
       >

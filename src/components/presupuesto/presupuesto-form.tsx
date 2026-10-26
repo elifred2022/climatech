@@ -293,7 +293,7 @@ export function PresupuestoForm({
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#0f2438] disabled:opacity-60"
+        className="inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#081654] disabled:opacity-60"
       >
         {pending ? "Enviando…" : "Enviar datos"}
       </button>

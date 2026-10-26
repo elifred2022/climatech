@@ -108,7 +108,7 @@ export function AdjuntarPresupuesto({
         </a>
       ) : null}
       <label
-        className={`inline-flex cursor-pointer items-center justify-center rounded-full bg-navy font-semibold text-white transition hover:bg-[#0f2438] ${
+        className={`inline-flex cursor-pointer items-center justify-center rounded-full bg-navy font-semibold text-white transition hover:bg-[#081654] ${
           compact ? "h-auto min-h-8 w-full px-2 py-1 text-center text-[11px] leading-tight" : "h-11 px-4 text-sm"
         } ${pending ? "opacity-60" : ""}`}
       >

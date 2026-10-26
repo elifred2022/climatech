@@ -47,7 +47,7 @@ export default async function CuentaPage() {
       <div className="mt-8 flex flex-col gap-3">
         <a
           href="/presupuestos"
-          className="inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#0f2438]"
+          className="inline-flex h-12 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#081654]"
         >
           {isAdmin(rol) ? "Mostrar presupuestos" : "Mis presupuestos"}
         </a>

@@ -37,7 +37,7 @@ export function EditarRol({ id, rol }: { id: string; rol: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-navy px-2 py-1 text-center text-[11px] font-semibold leading-tight text-white transition hover:bg-[#0f2438]"
+        className="mt-1 inline-flex w-full items-center justify-center rounded-full bg-navy px-2 py-1 text-center text-[11px] font-semibold leading-tight text-white transition hover:bg-[#081654]"
       >
         Editar rol
       </button>
