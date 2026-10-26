@@ -54,12 +54,12 @@ export default async function Home() {
         className="pointer-events-none absolute -right-16 top-0 h-80 w-80 rounded-full bg-heat/15 blur-3xl"
       />
 
-      <header className="relative z-30 mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
-        <div className="flex items-center gap-3">
+      <header className="relative z-30 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-8 sm:py-5">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           {esAdmin ? <AdminMenu /> : null}
-          <a href="#inicio" className="flex items-center gap-3">
+          <a href="#inicio" className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Logo />
-            <span className="text-lg font-semibold tracking-tight">Climatech</span>
+            <span className="truncate text-lg font-semibold tracking-tight">Climatech</span>
           </a>
         </div>
         <nav className="hidden items-center gap-6 text-sm font-medium text-navy/80 sm:flex">
@@ -73,20 +73,21 @@ export default async function Home() {
             Contacto
           </a>
         </nav>
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {nombre ? (
-            <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-2">
               <a
                 href="/cuenta"
-                className="flex max-w-[16rem] items-center gap-2 text-sm font-semibold text-navy sm:max-w-none"
+                aria-label="Mi cuenta"
+                className="flex items-center gap-2 text-sm font-semibold text-navy"
               >
                 <PersonIcon />
-                <span className="truncate">{saludo}</span>
+                <span className="hidden max-w-[16rem] truncate sm:inline">{saludo}</span>
               </a>
               {esAdmin ? null : (
                 <a
                   href="/presupuestos"
-                  className="rounded-full border border-[#b7e4f4] bg-white px-3 py-1 text-xs font-semibold text-navy transition hover:border-teal"
+                  className="hidden rounded-full border border-[#b7e4f4] bg-white px-3 py-1 text-xs font-semibold text-navy transition hover:border-teal sm:inline"
                 >
                   Ver mis presupuestos
                 </a>
@@ -95,7 +96,7 @@ export default async function Home() {
           ) : (
             <a
               href="/ingresar"
-              className="rounded-full px-3 py-2 text-sm font-semibold text-navy transition hover:text-teal"
+              className="hidden rounded-full px-3 py-2 text-sm font-semibold text-navy transition hover:text-teal sm:inline"
             >
               Ingresar
             </a>
@@ -104,9 +105,13 @@ export default async function Home() {
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1ebe5b]"
+            aria-label="WhatsApp"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full sm:h-auto sm:w-auto sm:bg-[#25D366] sm:px-4 sm:py-2 sm:text-sm sm:font-semibold sm:text-white sm:shadow-sm sm:transition sm:hover:bg-[#1ebe5b]"
           >
-            WhatsApp
+            <span className="sm:hidden">
+              <WhatsappIcon />
+            </span>
+            <span className="hidden sm:inline">WhatsApp</span>
           </a>
         </div>
       </header>
@@ -117,7 +122,11 @@ export default async function Home() {
           className="relative overflow-hidden rounded-[2rem] border border-[#c5e6f6] bg-white/80 px-6 py-12 shadow-[0_20px_60px_rgba(11,31,107,0.08)] sm:px-12 sm:py-16"
         >
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <Logo large />
+            <img
+              src="/split-frio.jpg"
+              alt="Equipo split de aire acondicionado"
+              className="h-auto w-full max-w-xl object-contain"
+            />
             <p className="mt-6 text-sm font-semibold uppercase tracking-[0.22em] text-teal">
               CABA y AMBA
             </p>
@@ -278,13 +287,12 @@ function PersonIcon() {
   );
 }
 
-function Logo({ large = false }: { large?: boolean }) {
-  const size = large ? "h-44 w-44 sm:h-52 sm:w-52" : "h-16 w-16";
+function Logo() {
   return (
     <img
       src="/logo.jpg"
       alt=""
-      className={`${size} rounded-full object-cover`}
+      className="h-12 w-12 rounded-full object-cover sm:h-16 sm:w-16"
     />
   );
 }
