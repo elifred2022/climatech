@@ -22,6 +22,8 @@ export default async function IngresarPage({
       subtitle={
         next === "/usuarios"
           ? "Para ver los usuarios, iniciá sesión."
+          : next === "/tablas-tecnicas"
+            ? "Para ver las tablas técnicas, iniciá sesión."
           : next === "/presupuestos"
             ? "Para ver tus presupuestos, iniciá sesión. Si no tenés cuenta, registrate."
           : porPresupuesto

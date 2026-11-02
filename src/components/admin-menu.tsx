@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 const links = [
   { href: "/presupuestos", label: "Mostrar presupuestos" },
   { href: "/usuarios", label: "Mostrar usuarios" },
+  { href: "/tablas-tecnicas", label: "Tablas técnicas" },
 ];
 
 export function AdminMenu() {

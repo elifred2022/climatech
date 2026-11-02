@@ -59,6 +59,14 @@ export default async function CuentaPage() {
             Mostrar usuarios
           </a>
         ) : null}
+        {isAdmin(rol) ? (
+          <a
+            href="/tablas-tecnicas"
+            className="inline-flex h-12 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal"
+          >
+            Tablas técnicas
+          </a>
+        ) : null}
         <LogoutButton />
       </div>
     </AuthScreen>
