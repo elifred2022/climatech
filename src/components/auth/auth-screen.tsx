@@ -22,7 +22,7 @@ export function AuthScreen({
         className={`mx-auto flex w-full items-center justify-between ${fit ? "px-4 py-3" : "max-w-6xl px-5 py-5 sm:px-8"}`}
       >
         <Link href="/" className="text-lg font-semibold tracking-tight">
-          Climatech
+          Climatecno
         </Link>
         <Link href="/" className="text-sm font-medium text-navy/70 hover:text-teal">
           Volver al inicio

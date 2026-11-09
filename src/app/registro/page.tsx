@@ -4,7 +4,7 @@ import { RegisterForm } from "@/components/auth/register-form";
 import { safeNext } from "@/lib/auth-next";
 
 export const metadata: Metadata = {
-  title: "Crear cuenta | Climatech",
+  title: "Crear cuenta | Climatecno",
 };
 
 export default async function RegistroPage({

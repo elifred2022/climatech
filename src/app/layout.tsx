@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Climatech | Servicio técnico de aires acondicionados",
+  title: "Climatecno | Servicio técnico de aires acondicionados",
   description:
     "Instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA. Pedí tu presupuesto por WhatsApp.",
 };

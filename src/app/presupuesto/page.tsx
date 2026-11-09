@@ -6,7 +6,7 @@ import { PresupuestoPanel } from "@/components/presupuesto/presupuesto-panel";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Pedir presupuesto | Climatech",
+  title: "Pedir presupuesto | Climatecno",
 };
 
 export default async function PresupuestoPage() {

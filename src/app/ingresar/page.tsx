@@ -4,7 +4,7 @@ import { LoginForm } from "@/components/auth/login-form";
 import { safeNext } from "@/lib/auth-next";
 
 export const metadata: Metadata = {
-  title: "Iniciar sesión | Climatech",
+  title: "Iniciar sesión | Climatecno",
 };
 
 export default async function IngresarPage({

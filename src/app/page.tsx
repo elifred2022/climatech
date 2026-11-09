@@ -4,8 +4,8 @@ import { AdminMenu } from "@/components/admin-menu";
 import { isAdmin } from "@/lib/roles";
 
 const whatsappHref =
-  "https://wa.me/5491127003907?text=Hola%20Climatech%2C%20quiero%20un%20presupuesto";
-const instagramHref = "https://instagram.com/climatech.ve";
+  "https://wa.me/5491127003907?text=Hola%20Climatecno%2C%20quiero%20un%20presupuesto";
+const instagramHref = "https://instagram.com/climatecno.ve";
 
 const services = [
   {
@@ -59,7 +59,7 @@ export default async function Home() {
           {esAdmin ? <AdminMenu /> : null}
           <a href="#inicio" className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Logo />
-            <span className="truncate text-lg font-semibold tracking-tight">Climatech</span>
+            <span className="truncate text-lg font-semibold tracking-tight">Climatecno</span>
           </a>
         </div>
         <nav className="hidden items-center gap-6 text-sm font-medium text-navy/80 sm:flex">
@@ -222,7 +222,7 @@ export default async function Home() {
               className="inline-flex items-center justify-center gap-3 rounded-2xl bg-white px-5 py-4 font-bold text-navy transition hover:bg-ice"
             >
               <InstagramIcon />
-              <span>@climatech.ve</span>
+              <span>@climatecno.ve</span>
             </a>
           </div>
           <p className="mt-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-white/90">

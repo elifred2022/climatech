@@ -6,7 +6,7 @@ import { isAdmin } from "@/lib/roles";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
-  title: "Tablas técnicas | Climatech",
+  title: "Tablas técnicas | Climatecno",
 };
 
 export default async function TablasTecnicasPage() {

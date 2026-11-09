@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/roles";
 
 export const metadata: Metadata = {
-  title: "Mis presupuestos | Climatech",
+  title: "Mis presupuestos | Climatecno",
 };
 
 export default async function PresupuestosPage() {

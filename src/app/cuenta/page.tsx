@@ -7,7 +7,7 @@ import { ensureUsuario } from "@/lib/supabase/usuarios";
 import { isAdmin } from "@/lib/roles";
 
 export const metadata: Metadata = {
-  title: "Mi cuenta | Climatech",
+  title: "Mi cuenta | Climatecno",
 };
 
 export default async function CuentaPage() {
