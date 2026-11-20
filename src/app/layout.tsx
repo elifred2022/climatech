@@ -13,9 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.climatecno.com.ar"),
   title: "Climatecno | Servicio técnico de aires acondicionados",
   description:
     "Instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA. Pedí tu presupuesto por WhatsApp.",
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    siteName: "Climatecno",
+    title: "Climatecno | Servicio técnico de aires acondicionados",
+    description:
+      "Instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA.",
+    images: ["/split-frio.jpg"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

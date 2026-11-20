@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import type { Metadata } from "next";
 import type { User } from "@supabase/supabase-js";
 import { AdminMenu } from "@/components/admin-menu";
 import { isAdmin } from "@/lib/roles";
@@ -35,6 +36,37 @@ const services = [
   },
 ];
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HVACBusiness",
+  name: "Climatecno",
+  description:
+    "Servicio técnico de aires acondicionados: instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA.",
+  url: "https://www.climatecno.com.ar",
+  image: "https://www.climatecno.com.ar/split-frio.jpg",
+  logo: "https://www.climatecno.com.ar/logo.jpg",
+  telephone: "+54 9 11 2700-3907",
+  areaServed: [
+    { "@type": "City", name: "Ciudad Autónoma de Buenos Aires" },
+    { "@type": "AdministrativeArea", name: "Área Metropolitana de Buenos Aires" },
+  ],
+  sameAs: ["https://instagram.com/climatecno.ve"],
+  makesOffer: [
+    "Instalación",
+    "Mantenimiento",
+    "Diagnóstico",
+    "Mudanza de equipos",
+    "Reparación",
+  ].map((name) => ({
+    "@type": "Offer",
+    itemOffered: { "@type": "Service", name },
+  })),
+};
+
 export default async function Home() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
@@ -45,6 +77,12 @@ export default async function Home() {
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[radial-gradient(circle_at_top_left,_#d9f6ff_0%,_#eef4ff_42%,_#f7fbff_100%)] text-navy">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <div
         aria-hidden
         className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-teal/20 blur-3xl"
