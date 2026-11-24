@@ -67,6 +67,14 @@ export default async function CuentaPage() {
             Tablas técnicas
           </a>
         ) : null}
+        {isAdmin(rol) ? (
+          <a
+            href="/lista-de-precios"
+            className="inline-flex h-12 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal"
+          >
+            Lista de precios
+          </a>
+        ) : null}
         <LogoutButton />
       </div>
     </AuthScreen>

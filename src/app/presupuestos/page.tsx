@@ -54,6 +54,7 @@ function toItem(row: Record<string, unknown>, index: number): PresupuestoItem {
     fechaDia: dayKey(row.created_at),
     direccion: text(row.direccion_instalacion) || "Sin dirección",
     capacidad: capacity(row.capacidad_equipo),
+    capacidadValor: capacityValue(row.capacidad_equipo),
     servicio: text(row.tipo_servicio),
     ubicacion: text(row.ubicacion_fisica),
     facilAcceso: answer(row.facil_acceso),
@@ -108,6 +109,11 @@ function photoSrc(value: unknown) {
   if (typeof record.url === "string") return record.url;
   if (typeof record.imagen === "string") return record.imagen;
   return "";
+}
+
+function capacityValue(value: unknown) {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  return text(value);
 }
 
 function capacity(value: unknown) {

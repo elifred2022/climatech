@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Buscar, matchesSearch } from "@/components/buscar";
+import { Field } from "@/components/auth/field";
+import { createClient } from "@/lib/supabase/client";
 import { AdjuntarPresupuesto, type PresupuestoDocumento } from "@/components/presupuesto/adjuntar-presupuesto";
 import { EditarConfirma } from "@/components/presupuesto/editar-confirma";
 import { formatHistoryDate, type EstadoFecha } from "@/lib/presupuesto-historial";
@@ -13,6 +16,7 @@ export type PresupuestoItem = {
   fechaDia: string;
   direccion: string;
   capacidad: string;
+  capacidadValor: string;
   servicio: string;
   ubicacion: string;
   facilAcceso: string;
@@ -72,12 +76,20 @@ export function MisPresupuestos({ items, todos = false }: { items: PresupuestoIt
       )}
       <PresupuestosTabla items={visible} todos={todos} empty={items.length === 0} filtering={filtering} />
       {todos ? null : (
-        <Link
-          href="/presupuesto"
-          className="inline-flex h-12 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal"
-        >
-          {items.length === 0 ? "Pedir presupuesto" : "Pedir otro presupuesto"}
-        </Link>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/presupuesto"
+            className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal"
+          >
+            {items.length === 0 ? "Pedir presupuesto" : "Pedir otro presupuesto"}
+          </Link>
+          <Link
+            href="/lista-de-precios"
+            className="inline-flex h-12 flex-1 items-center justify-center rounded-full bg-teal text-sm font-semibold text-navy shadow-[0_8px_24px_rgba(20,200,232,0.45)] transition hover:bg-[#0eb6d4]"
+          >
+            Lista de precios
+          </Link>
+        </div>
       )}
     </div>
   );
@@ -97,6 +109,8 @@ function PresupuestosTabla({
   empty: boolean;
   filtering: boolean;
 }) {
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   if (items.length === 0) {
     return (
       <p className="text-sm leading-6 text-navy/75">
@@ -116,6 +130,10 @@ function PresupuestosTabla({
       <ul className="flex flex-col gap-3 lg:hidden">
         {items.map((item) => (
           <li key={item.id} className="rounded-2xl border border-[#d3e7f3] bg-white p-3">
+            {editingId === item.id ? (
+              <PresupuestoForm item={item} onClose={() => setEditingId(null)} />
+            ) : (
+              <>
             <div className="flex items-start justify-between gap-3">
               <p className="text-sm font-semibold">#{item.id}</p>
               <p className="text-right text-xs text-navy/60">{item.fecha}</p>
@@ -150,6 +168,9 @@ function PresupuestosTabla({
               {todos ? <AdjuntarPresupuesto id={item.id} documento={item.documento} compact /> : null}
               <DocumentoValor item={item} />
             </div>
+            <FilaAcciones item={item} onEdit={() => setEditingId(item.id)} />
+              </>
+            )}
           </li>
         ))}
       </ul>
@@ -166,10 +187,20 @@ function PresupuestosTabla({
           <th className={head}>Fecha de presupuesto</th>
           {todos ? <th className={head} /> : null}
           <th className={head}>Presupuestos</th>
+          <th className={head}>
+            <span className="sr-only">Acciones</span>
+          </th>
         </tr>
       </thead>
       <tbody>
-        {items.map((item) => (
+        {items.map((item) =>
+          editingId === item.id ? (
+            <tr key={item.id} className="border-b border-[#e7f3fa] align-top">
+              <td className={cell} colSpan={todos ? 11 : 9}>
+                <PresupuestoForm item={item} onClose={() => setEditingId(null)} />
+              </td>
+            </tr>
+          ) : (
           <tr key={item.id} className="border-b border-[#e7f3fa] align-top">
             <td className={`${cell} font-semibold`}>{item.id}</td>
             <td className={cell}>{item.fecha}</td>
@@ -199,12 +230,300 @@ function PresupuestosTabla({
             <td className={cell}>
               <DocumentoValor item={item} />
             </td>
+            <td className={cell}>
+              <FilaAcciones item={item} onEdit={() => setEditingId(item.id)} />
+            </td>
           </tr>
-        ))}
+          ),
+        )}
       </tbody>
     </table>
     </>
   );
+}
+
+const servicios = ["Instalación nuevo", "Mantenimiento", "Diagnóstico", "Reparación", "Mudanza"];
+
+function PresupuestoForm({ item, onClose }: { item: PresupuestoItem; onClose: () => void }) {
+  const router = useRouter();
+  const [servicio, setServicio] = useState(item.servicio);
+  const [direccion, setDireccion] = useState(item.direccion === "Sin dirección" ? "" : item.direccion);
+  const [capacidad, setCapacidad] = useState(item.capacidadValor);
+  const [ubicacion, setUbicacion] = useState(item.ubicacion === "—" ? "" : item.ubicacion);
+  const [facilAcceso, setFacilAcceso] = useState(choice(item.facilAcceso));
+  const [instalacionElectrica, setInstalacionElectrica] = useState(choice(item.instalacionElectrica));
+  const [equipoNuevo, setEquipoNuevo] = useState(choice(item.nuevo));
+  const [desinstalar, setDesinstalar] = useState(choice(item.desinstalar));
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+  const opciones = servicio && !servicios.includes(servicio) ? [servicio, ...servicios] : servicios;
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!servicio) {
+      setError("Elegí el tipo de servicio.");
+      return;
+    }
+    const frigorias = Number(capacidad.replace(",", "."));
+    if (!Number.isFinite(frigorias) || frigorias <= 0) {
+      setError("Indicá la capacidad del equipo en frigorías.");
+      return;
+    }
+    if (!facilAcceso || !instalacionElectrica || !equipoNuevo) {
+      setError("Respondé todas las preguntas del presupuesto.");
+      return;
+    }
+    if (equipoNuevo === "no" && !desinstalar) {
+      setError("Indicá si desinstalamos el equipo usado.");
+      return;
+    }
+
+    setError("");
+    setPending(true);
+    const supabase = createClient();
+    const { error: updateError } = await supabase
+      .from("presupuestos")
+      .update({
+        tipo_servicio: servicio,
+        direccion_instalacion: direccion.trim(),
+        capacidad_equipo: frigorias,
+        ubicacion_fisica: ubicacion.trim(),
+        facil_acceso: facilAcceso,
+        tiene_electrcidad: instalacionElectrica,
+        nuevo: equipoNuevo,
+        usado_desinstalamos: equipoNuevo === "si" ? "no" : desinstalar,
+      })
+      .eq("id", Number(item.id));
+    setPending(false);
+    if (updateError) {
+      setError("No se pudieron guardar los cambios.");
+      return;
+    }
+    onClose();
+    router.refresh();
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded-2xl border border-[#d3e7f3] bg-white p-4">
+      <label className="flex flex-col gap-2 text-sm font-semibold">
+        Tipo de servicio
+        <select
+          name={`servicio-${item.id}`}
+          value={servicio}
+          onChange={(event) => setServicio(event.target.value)}
+          required
+          className="h-12 rounded-2xl border border-[#c5dff0] bg-ice px-4 font-normal text-navy outline-none focus:border-teal"
+        >
+          <option value="">Elegí un servicio</option>
+          {opciones.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field
+          label="Dirección de instalación"
+          name={`direccion-${item.id}`}
+          value={direccion}
+          onChange={(event) => setDireccion(event.target.value)}
+          required
+        />
+        <Field
+          label="Capacidad del equipo en frig"
+          name={`capacidad-${item.id}`}
+          value={capacidad}
+          onChange={(event) => setCapacidad(event.target.value)}
+          inputMode="decimal"
+          required
+        />
+      </div>
+      <label className="flex flex-col gap-2 text-sm font-semibold">
+        Ubicación física
+        <textarea
+          name={`ubicacion-${item.id}`}
+          value={ubicacion}
+          onChange={(event) => setUbicacion(event.target.value)}
+          rows={3}
+          className="rounded-2xl border border-[#c5dff0] bg-ice px-4 py-3 font-normal text-navy outline-none focus:border-teal"
+        />
+      </label>
+      <SiNo label="¿Tiene fácil acceso?" name={`facil-${item.id}`} value={facilAcceso} onChange={setFacilAcceso} />
+      <SiNo
+        label="¿Cuenta con instalación eléctrica?"
+        name={`electrica-${item.id}`}
+        value={instalacionElectrica}
+        onChange={setInstalacionElectrica}
+      />
+      <SiNo label="¿El equipo es nuevo?" name={`nuevo-${item.id}`} value={equipoNuevo} onChange={setEquipoNuevo} />
+      {equipoNuevo === "no" ? (
+        <SiNo
+          label="Si es usado, ¿lo desinstalamos nosotros?"
+          name={`desinstalar-${item.id}`}
+          value={desinstalar}
+          onChange={setDesinstalar}
+        />
+      ) : null}
+      {error ? (
+        <p className="rounded-2xl bg-[#fff1f1] px-4 py-3 text-sm text-[#9b2c2c]" role="alert">
+          {error}
+        </p>
+      ) : null}
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <button
+          type="submit"
+          disabled={pending}
+          className="inline-flex h-12 flex-1 items-center justify-center rounded-full bg-navy text-sm font-semibold text-white transition hover:bg-[#081654] disabled:opacity-60"
+        >
+          {pending ? "Guardando..." : "Guardar"}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          disabled={pending}
+          className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal disabled:opacity-60"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function SiNo({
+  label,
+  name,
+  value,
+  onChange,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (value: "si" | "no") => void;
+}) {
+  return (
+    <fieldset className="flex flex-col gap-2">
+      <legend className="text-sm font-semibold">{label}</legend>
+      <div className="grid grid-cols-2 gap-2">
+        {(
+          [
+            ["si", "Sí"],
+            ["no", "No"],
+          ] as const
+        ).map(([option, text]) => (
+          <label
+            key={option}
+            className={`flex h-12 cursor-pointer items-center justify-center rounded-2xl border text-sm font-semibold ${
+              value === option ? "border-teal bg-[#e7f5fb] text-navy" : "border-[#c5dff0] bg-ice text-navy/70"
+            }`}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option}
+              checked={value === option}
+              onChange={() => onChange(option)}
+              className="sr-only"
+            />
+            {text}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+function FilaAcciones({ item, onEdit }: { item: PresupuestoItem; onEdit: () => void }) {
+  const router = useRouter();
+  const [confirming, setConfirming] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+
+  async function onDelete() {
+    setError("");
+    setPending(true);
+    const supabase = createClient();
+    const current = await supabase.from("presupuestos").select("foto, presupuesto").eq("id", Number(item.id)).maybeSingle();
+    const { error: deleteError } = await supabase.from("presupuestos").delete().eq("id", Number(item.id));
+    setPending(false);
+    if (deleteError) {
+      setError("No se pudo eliminar el presupuesto.");
+      return;
+    }
+    const fotos = pathsOf(current.data?.foto);
+    const documento = pathOf(current.data?.presupuesto);
+    if (fotos.length > 0) await supabase.storage.from("fotos").remove(fotos);
+    if (documento) await supabase.storage.from("documentos").remove([documento]);
+    router.refresh();
+  }
+
+  if (confirming) {
+    return (
+      <div className="mt-3 flex flex-col gap-2 lg:mt-0">
+        <p className="text-xs font-medium text-navy/70">¿Eliminar el presupuesto #{item.id}?</p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => void onDelete()}
+            disabled={pending}
+            className="inline-flex h-8 items-center justify-center rounded-full bg-[#9b2c2c] px-3 text-xs font-semibold text-white transition hover:bg-[#7f2424] disabled:opacity-60"
+          >
+            {pending ? "Eliminando..." : "Eliminar"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirming(false)}
+            disabled={pending}
+            className="inline-flex h-8 items-center justify-center rounded-full border border-[#b7d7ea] bg-white px-3 text-xs font-semibold text-navy transition hover:border-teal disabled:opacity-60"
+          >
+            Cancelar
+          </button>
+        </div>
+        {error ? <p className="text-xs font-medium text-[#9b2c2c]">{error}</p> : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 flex flex-wrap gap-2 lg:mt-0">
+      <button
+        type="button"
+        onClick={onEdit}
+        className="inline-flex h-8 items-center justify-center rounded-full border border-[#b7d7ea] bg-white px-3 text-xs font-semibold text-navy transition hover:border-teal"
+      >
+        Editar
+      </button>
+      <button
+        type="button"
+        onClick={() => setConfirming(true)}
+        className="inline-flex h-8 items-center justify-center rounded-full border border-[#f0c9c9] bg-white px-3 text-xs font-semibold text-[#9b2c2c] transition hover:border-[#9b2c2c]"
+      >
+        Eliminar
+      </button>
+    </div>
+  );
+}
+
+function pathsOf(value: unknown) {
+  const list = Array.isArray(value) ? value : value ? [value] : [];
+  return list.flatMap((item) => {
+    const path = pathOf(item);
+    return path ? [path] : [];
+  });
+}
+
+function pathOf(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return "";
+  const path = (value as { path?: unknown }).path;
+  return typeof path === "string" ? path : "";
+}
+
+function choice(value: string) {
+  const text = value.trim().toLowerCase();
+  if (text === "sí" || text === "si") return "si";
+  if (text === "no") return "no";
+  return "";
 }
 
 function Dato({ label, value }: { label: string; value: string }) {

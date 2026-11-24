@@ -1,0 +1,136 @@
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 1302179..95fa9e6 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -13,9 +13,19 @@ const geistMono = Geist_Mono({
+ });
+ 
+ export const metadata: Metadata = {
++  metadataBase: new URL("https://www.climatecno.com.ar"),
+   title: "Climatecno | Servicio técnico de aires acondicionados",
+   description:
+     "Instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA. Pedí tu presupuesto por WhatsApp.",
++  openGraph: {
++    type: "website",
++    locale: "es_AR",
++    siteName: "Climatecno",
++    title: "Climatecno | Servicio técnico de aires acondicionados",
++    description:
++      "Instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA.",
++    images: ["/split-frio.jpg"],
++  },
+ };
+ 
+ export default function RootLayout({ children }: LayoutProps<"/">) {
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index b7b9b18..55824a2 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -1,4 +1,5 @@
+ import { createClient } from "@/lib/supabase/server";
++import type { Metadata } from "next";
+ import type { User } from "@supabase/supabase-js";
+ import { AdminMenu } from "@/components/admin-menu";
+ import { isAdmin } from "@/lib/roles";
+@@ -35,6 +36,37 @@ const services = [
+   },
+ ];
+ 
++export const metadata: Metadata = {
++  alternates: { canonical: "/" },
++};
++
++const localBusinessJsonLd = {
++  "@context": "https://schema.org",
++  "@type": "HVACBusiness",
++  name: "Climatecno",
++  description:
++    "Servicio técnico de aires acondicionados: instalación, mantenimiento, diagnóstico, reparación y mudanza de equipos en CABA y AMBA.",
++  url: "https://www.climatecno.com.ar",
++  image: "https://www.climatecno.com.ar/split-frio.jpg",
++  logo: "https://www.climatecno.com.ar/logo.jpg",
++  telephone: "+54 9 11 2700-3907",
++  areaServed: [
++    { "@type": "City", name: "Ciudad Autónoma de Buenos Aires" },
++    { "@type": "AdministrativeArea", name: "Área Metropolitana de Buenos Aires" },
++  ],
++  sameAs: ["https://instagram.com/climatecno.ve"],
++  makesOffer: [
++    "Instalación",
++    "Mantenimiento",
++    "Diagnóstico",
++    "Mudanza de equipos",
++    "Reparación",
++  ].map((name) => ({
++    "@type": "Offer",
++    itemOffered: { "@type": "Service", name },
++  })),
++};
++
+ export default async function Home() {
+   const supabase = await createClient();
+   const { data } = await supabase.auth.getUser();
+@@ -45,6 +77,12 @@ export default async function Home() {
+ 
+   return (
+     <div className="relative min-h-full overflow-hidden bg-[radial-gradient(circle_at_top_left,_#d9f6ff_0%,_#eef4ff_42%,_#f7fbff_100%)] text-navy">
++      <script
++        type="application/ld+json"
++        dangerouslySetInnerHTML={{
++          __html: JSON.stringify(localBusinessJsonLd).replace(/</g, "\\u003c"),
++        }}
++      />
+       <div
+         aria-hidden
+         className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-teal/20 blur-3xl"
+diff --git a/src/app/robots.ts b/src/app/robots.ts
+new file mode 100644
+index 0000000..3edb379
+--- /dev/null
++++ b/src/app/robots.ts
+@@ -0,0 +1,24 @@
++import type { MetadataRoute } from "next";
++
++const siteUrl = "https://www.climatecno.com.ar";
++
++export default function robots(): MetadataRoute.Robots {
++  return {
++    rules: {
++      userAgent: "*",
++      allow: "/",
++      disallow: [
++        "/ingresar",
++        "/registro",
++        "/cuenta",
++        "/usuarios",
++        "/presupuesto",
++        "/presupuestos",
++        "/tablas-tecnicas",
++        "/auth/",
++      ],
++    },
++    sitemap: `${siteUrl}/sitemap.xml`,
++    host: siteUrl,
++  };
++}
+diff --git a/src/app/sitemap.ts b/src/app/sitemap.ts
+new file mode 100644
+index 0000000..35fc1e8
+--- /dev/null
++++ b/src/app/sitemap.ts
+@@ -0,0 +1,15 @@
++import type { MetadataRoute } from "next";
++
++const siteUrl = "https://www.climatecno.com.ar";
++
++// Solo la home es pública. Las demás rutas (login, cuenta, presupuestos,
++// usuarios, tablas técnicas) requieren sesión y no deben indexarse.
++export default function sitemap(): MetadataRoute.Sitemap {
++  return [
++    {
++      url: siteUrl,
++      changeFrequency: "monthly",
++      priority: 1,
++    },
++  ];
++}

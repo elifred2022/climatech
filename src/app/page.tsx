@@ -74,6 +74,7 @@ export default async function Home() {
   const nombre = profile.nombre;
   const saludo = greeting(profile.nombre, profile.rol);
   const esAdmin = isAdmin(profile.rol);
+  const esCliente = Boolean(data.user) && !esAdmin;
 
   return (
     <div className="relative min-h-full overflow-hidden bg-[radial-gradient(circle_at_top_left,_#d9f6ff_0%,_#eef4ff_42%,_#f7fbff_100%)] text-navy">
@@ -183,6 +184,14 @@ export default async function Home() {
               >
                 Pedir presupuesto
               </a>
+              {esCliente ? (
+                <a
+                  href="/lista-de-precios"
+                  className="inline-flex h-12 items-center justify-center rounded-full bg-teal px-6 text-sm font-semibold text-navy shadow-[0_8px_24px_rgba(20,200,232,0.45)] transition hover:bg-[#0eb6d4]"
+                >
+                  Lista de precios
+                </a>
+              ) : null}
               <a
                 href="#servicios"
                 className="inline-flex h-12 items-center justify-center rounded-full border border-[#b7e4f4] bg-ice px-6 text-sm font-semibold text-navy transition hover:border-teal"

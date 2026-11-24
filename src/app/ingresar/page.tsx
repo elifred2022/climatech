@@ -24,6 +24,8 @@ export default async function IngresarPage({
           ? "Para ver los usuarios, iniciá sesión."
           : next === "/tablas-tecnicas"
             ? "Para ver las tablas técnicas, iniciá sesión."
+          : next === "/lista-de-precios"
+            ? "Para ver la lista de precios, iniciá sesión."
           : next === "/presupuestos"
             ? "Para ver tus presupuestos, iniciá sesión. Si no tenés cuenta, registrate."
           : porPresupuesto

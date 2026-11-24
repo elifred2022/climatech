@@ -6,6 +6,7 @@ const links = [
   { href: "/presupuestos", label: "Mostrar presupuestos" },
   { href: "/usuarios", label: "Mostrar usuarios" },
   { href: "/tablas-tecnicas", label: "Tablas técnicas" },
+  { href: "/lista-de-precios", label: "Lista de precios" },
 ];
 
 export function AdminMenu() {

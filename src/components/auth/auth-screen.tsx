@@ -9,7 +9,7 @@ export function AuthScreen({
   fit = false,
   children,
 }: {
-  title: string;
+  title: ReactNode;
   subtitle?: string;
   wide?: boolean;
   broad?: boolean;
