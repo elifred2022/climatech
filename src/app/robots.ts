@@ -15,7 +15,6 @@ export default function robots(): MetadataRoute.Robots {
         "/presupuesto",
         "/presupuestos",
         "/tablas-tecnicas",
-        "/lista-de-precios",
         "/auth/",
       ],
     },

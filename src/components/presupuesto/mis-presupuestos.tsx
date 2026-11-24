@@ -78,16 +78,16 @@ export function MisPresupuestos({ items, todos = false }: { items: PresupuestoIt
       {todos ? null : (
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
-            href="/presupuesto"
-            className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal"
-          >
-            {items.length === 0 ? "Pedir presupuesto" : "Pedir otro presupuesto"}
-          </Link>
-          <Link
             href="/lista-de-precios"
             className="inline-flex h-12 flex-1 items-center justify-center rounded-full bg-teal text-sm font-semibold text-navy shadow-[0_8px_24px_rgba(20,200,232,0.45)] transition hover:bg-[#0eb6d4]"
           >
             Lista de precios
+          </Link>
+          <Link
+            href="/presupuesto"
+            className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-[#b7d7ea] bg-white text-sm font-semibold text-navy transition hover:border-teal"
+          >
+            {items.length === 0 ? "Pedir presupuesto" : "Pedir otro presupuesto"}
           </Link>
         </div>
       )}

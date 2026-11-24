@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { AuthScreen } from "@/components/auth/auth-screen";
 import { ListaPrecios, type PrecioItem } from "@/components/precios/lista-precios";
 import { isAdmin } from "@/lib/roles";
@@ -13,12 +12,9 @@ export default async function ListaDePreciosPage() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   const email = data.user?.email?.trim().toLowerCase();
-
-  if (!email) {
-    redirect("/ingresar?siguiente=/lista-de-precios");
-  }
-
-  const { data: usuario } = await supabase.from("usuarios").select("rol").eq("email", email).limit(1);
+  const { data: usuario } = email
+    ? await supabase.from("usuarios").select("rol").eq("email", email).limit(1)
+    : { data: null };
   const admin = isAdmin(text(usuario?.[0]?.rol));
 
   const { data: rows, error } = await supabase
