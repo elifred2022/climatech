@@ -4,8 +4,23 @@ import { ListaPrecios, type PrecioItem } from "@/components/precios/lista-precio
 import { isAdmin } from "@/lib/roles";
 import { createClient } from "@/lib/supabase/server";
 
+const title = "Lista de precios de instalación y service de aires acondicionados | Climatecno";
+const description =
+  "Valores de referencia de mano de obra y materiales para instalación, desinstalación, limpieza y mantenimiento, detección de fugas, carga de gas y reparaciones de aires acondicionados en CABA y AMBA.";
+
 export const metadata: Metadata = {
-  title: "Lista de precios | Climatecno",
+  title,
+  description,
+  alternates: { canonical: "/lista-de-precios" },
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    siteName: "Climatecno",
+    url: "/lista-de-precios",
+    title,
+    description,
+    images: ["/split-frio.jpg"],
+  },
 };
 
 export default async function ListaDePreciosPage() {
